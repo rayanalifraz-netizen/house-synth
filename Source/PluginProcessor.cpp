@@ -147,26 +147,26 @@ void HouseSynthProcessor::loadPreset(int index) {
     };
 
     switch (index) {
-        case 0: // House Chord — lush detuned saw pads
-            set("MODE", 0); set("WAVE", 0); set("DETUNE", 14.0f);
-            set("CUTOFF", 3500.0f); set("RESONANCE", 0.35f); set("FILTER_ENV_AMT", 0.2f);
-            set("AMP_ATK", 0.05f); set("AMP_DEC", 0.4f); set("AMP_SUS", 0.8f); set("AMP_REL", 0.8f);
-            set("FLT_ATK", 0.1f);  set("FLT_DEC", 0.5f); set("FLT_SUS", 0.3f); set("FLT_REL", 0.6f);
-            set("DRIVE", 0.05f); set("CHORUS", 0.6f); set("REVERB", 0.35f); set("MASTER", 0.8f);
+        case 0: // House Chord — wide detuned pad, slow attack, lots of width
+            set("MODE", 0); set("WAVE", 0); set("DETUNE", 22.0f);
+            set("CUTOFF", 2800.0f); set("RESONANCE", 0.3f); set("FILTER_ENV_AMT", 0.15f);
+            set("AMP_ATK", 0.08f); set("AMP_DEC", 0.5f); set("AMP_SUS", 0.85f); set("AMP_REL", 1.2f);
+            set("FLT_ATK", 0.15f); set("FLT_DEC", 0.6f); set("FLT_SUS", 0.4f); set("FLT_REL", 0.8f);
+            set("DRIVE", 0.0f); set("CHORUS", 0.8f); set("REVERB", 0.5f); set("MASTER", 0.75f);
             break;
-        case 1: // House Bass — punchy sub-dominant
-            set("MODE", 1); set("WAVE", 0); set("DETUNE", 3.0f);
-            set("CUTOFF", 600.0f); set("RESONANCE", 0.55f); set("FILTER_ENV_AMT", 0.7f);
-            set("AMP_ATK", 0.001f); set("AMP_DEC", 0.25f); set("AMP_SUS", 0.4f); set("AMP_REL", 0.2f);
-            set("FLT_ATK", 0.001f); set("FLT_DEC", 0.3f);  set("FLT_SUS", 0.0f); set("FLT_REL", 0.2f);
-            set("DRIVE", 0.25f); set("CHORUS", 0.0f); set("REVERB", 0.05f); set("MASTER", 0.85f);
+        case 1: // House Bass — deep sine sub, instant attack, hard filter snap, zero width
+            set("MODE", 1); set("WAVE", 2); set("DETUNE", 0.0f);
+            set("CUTOFF", 180.0f); set("RESONANCE", 0.65f); set("FILTER_ENV_AMT", 0.9f);
+            set("AMP_ATK", 0.001f); set("AMP_DEC", 0.18f); set("AMP_SUS", 0.3f); set("AMP_REL", 0.15f);
+            set("FLT_ATK", 0.001f); set("FLT_DEC", 0.18f); set("FLT_SUS", 0.0f); set("FLT_REL", 0.1f);
+            set("DRIVE", 0.3f); set("CHORUS", 0.0f); set("REVERB", 0.0f); set("MASTER", 0.9f);
             break;
-        case 2: // House Lead — bright dual-saw
-            set("MODE", 2); set("WAVE", 0); set("DETUNE", 8.0f);
-            set("CUTOFF", 6000.0f); set("RESONANCE", 0.5f); set("FILTER_ENV_AMT", 0.4f);
-            set("AMP_ATK", 0.005f); set("AMP_DEC", 0.2f); set("AMP_SUS", 0.6f); set("AMP_REL", 0.4f);
-            set("FLT_ATK", 0.01f);  set("FLT_DEC", 0.35f); set("FLT_SUS", 0.2f); set("FLT_REL", 0.3f);
-            set("DRIVE", 0.1f); set("CHORUS", 0.25f); set("REVERB", 0.2f); set("MASTER", 0.8f);
+        case 2: // House Lead — single bright saw, wide open filter, punchy
+            set("MODE", 2); set("WAVE", 0); set("DETUNE", 5.0f);
+            set("CUTOFF", 9000.0f); set("RESONANCE", 0.6f); set("FILTER_ENV_AMT", 0.55f);
+            set("AMP_ATK", 0.003f); set("AMP_DEC", 0.15f); set("AMP_SUS", 0.5f); set("AMP_REL", 0.3f);
+            set("FLT_ATK", 0.003f); set("FLT_DEC", 0.25f); set("FLT_SUS", 0.1f); set("FLT_REL", 0.2f);
+            set("DRIVE", 0.15f); set("CHORUS", 0.15f); set("REVERB", 0.12f); set("MASTER", 0.8f);
             break;
     }
 }

@@ -97,22 +97,28 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int sta
 
     // Mix oscillators based on mode
     for (int i = 0; i < numSamples; ++i) {
-        float o1 = osc1.processSample(0.0f);
-        float o2 = osc2.processSample(0.0f);
+        float o1  = osc1.processSample(0.0f);
+        float o2  = osc2.processSample(0.0f);
         float sub = subOsc.processSample(0.0f);
 
         float sample = 0.0f;
         switch (mode) {
-            case 0: sample = (o1 * 0.4f) + (o2 * 0.4f) + (sub * 0.2f); break; // Chord — full + sub
-            case 1: sample = (sub * 0.6f) + (o1 * 0.3f) + (o2 * 0.1f); break; // Bass  — sub dominant
-            case 2: sample = (o1 * 0.5f) + (o2 * 0.5f);                 break; // Lead  — dual osc bright
+            case 0: // Chord — lush detuned saws, light sub body
+                sample = (o1 * 0.45f) + (o2 * 0.45f) + (sub * 0.1f);
+                break;
+            case 1: // Bass — pure sine sub + just a touch of saw bite
+                sample = (sub * 0.85f) + (o1 * 0.15f);
+                break;
+            case 2: // Lead — single bright saw, no sub at all
+                sample = o1 * 0.9f;
+                break;
         }
 
         data[i] = sample;
     }
 
-    // Filter envelope modulation
-    float envCutoffMod = filterEnvAmt * 8000.0f;
+    // Filter envelope modulation — bass gets 3x more snap
+    float envCutoffMod = filterEnvAmt * (mode == 1 ? 24000.0f : 8000.0f);
     for (int i = 0; i < numSamples; ++i) {
         float fEnv = filterEnv.getNextSample();
         float cutoff = juce::jlimit(80.0f, 18000.0f, filterCutoff + fEnv * envCutoffMod);
