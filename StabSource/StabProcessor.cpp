@@ -76,6 +76,57 @@ void StabProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuf
     masterGain.process(ctx);
 }
 
+void StabProcessor::setCurrentProgram(int index) {
+    currentProgram = index;
+    loadPreset(index);
+}
+
+const juce::String StabProcessor::getProgramName(int index) {
+    switch (index) {
+        case 0: return "Classic";
+        case 1: return "Soft";
+        case 2: return "Bright";
+        case 3: return "Deep";
+        default: return "Default";
+    }
+}
+
+void StabProcessor::loadPreset(int index) {
+    auto set = [&](const char* id, float v) {
+        if (auto* p = apvts.getParameter(id)) p->setValueNotifyingHost(p->convertTo0to1(v));
+    };
+    switch (index) {
+        case 0: // Classic — punchy house stab, saw, fast decay
+            set("STAB_CHORD", 2); set("STAB_WAVE", 0);
+            set("STAB_DECAY", 0.18f); set("STAB_REL", 0.08f);
+            set("STAB_CUTOFF", 3500.f); set("STAB_RES", 0.55f);
+            set("STAB_FENV", 0.65f); set("STAB_DRIVE", 0.15f);
+            set("STAB_REVERB", 0.08f); set("STAB_MASTER", 0.8f);
+            break;
+        case 1: // Soft — clean sine chord, gentle, no drive
+            set("STAB_CHORD", 0); set("STAB_WAVE", 2);
+            set("STAB_DECAY", 0.4f); set("STAB_REL", 0.3f);
+            set("STAB_CUTOFF", 6000.f); set("STAB_RES", 0.2f);
+            set("STAB_FENV", 0.1f); set("STAB_DRIVE", 0.0f);
+            set("STAB_REVERB", 0.3f); set("STAB_MASTER", 0.75f);
+            break;
+        case 2: // Bright — upbeat, airy, minor 7, short with reverb tail
+            set("STAB_CHORD", 3); set("STAB_WAVE", 2);
+            set("STAB_DECAY", 0.22f); set("STAB_REL", 0.5f);
+            set("STAB_CUTOFF", 9000.f); set("STAB_RES", 0.25f);
+            set("STAB_FENV", 0.2f); set("STAB_DRIVE", 0.0f);
+            set("STAB_REVERB", 0.45f); set("STAB_MASTER", 0.75f);
+            break;
+        case 3: // Deep — warm sus4, longer decay, low filter, full
+            set("STAB_CHORD", 4); set("STAB_WAVE", 0);
+            set("STAB_DECAY", 0.55f); set("STAB_REL", 0.4f);
+            set("STAB_CUTOFF", 1800.f); set("STAB_RES", 0.4f);
+            set("STAB_FENV", 0.5f); set("STAB_DRIVE", 0.05f);
+            set("STAB_REVERB", 0.2f); set("STAB_MASTER", 0.8f);
+            break;
+    }
+}
+
 void StabProcessor::getStateInformation(juce::MemoryBlock& dest) {
     auto state = apvts.copyState();
     std::unique_ptr<juce::XmlElement> xml(state.createXml());

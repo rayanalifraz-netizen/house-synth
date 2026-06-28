@@ -11,6 +11,7 @@ public:
 private:
     StabProcessor& proc;
 
+    juce::TextButton presetClassic, presetSoft, presetBright, presetDeep;
     juce::ComboBox chordBox, waveBox;
     juce::Label chordLabel, waveLabel;
 

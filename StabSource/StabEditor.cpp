@@ -7,7 +7,23 @@ static const juce::Colour TEXT   { 0xffdddddd };
 static const juce::Colour DIM    { 0xff888888 };
 
 StabEditor::StabEditor(StabProcessor& p) : AudioProcessorEditor(&p), proc(p) {
-    setSize(560, 280);
+    setSize(560, 310);
+
+    // Preset buttons
+    presetClassic.setButtonText("Classic");
+    presetSoft.setButtonText("Soft");
+    presetBright.setButtonText("Bright");
+    presetDeep.setButtonText("Deep");
+    for (auto* btn : { &presetClassic, &presetSoft, &presetBright, &presetDeep }) {
+        btn->setColour(juce::TextButton::buttonColourId,  PANEL);
+        btn->setColour(juce::TextButton::textColourOffId, ACCENT);
+        btn->setColour(juce::TextButton::buttonOnColourId, ACCENT);
+        addAndMakeVisible(btn);
+    }
+    presetClassic.onClick = [this] { proc.loadPreset(0); };
+    presetSoft.onClick    = [this] { proc.loadPreset(1); };
+    presetBright.onClick  = [this] { proc.loadPreset(2); };
+    presetDeep.onClick    = [this] { proc.loadPreset(3); };
 
     chordBox.addItemList({ "Major", "Minor", "Dom 7", "Min 7", "Sus4" }, 1);
     waveBox.addItemList({ "Saw", "Square", "Sine" }, 1);
@@ -69,21 +85,30 @@ void StabEditor::paint(juce::Graphics& g) {
     g.setColour(ACCENT.withAlpha(0.3f));
     g.drawHorizontalLine(48, 16, 544);
     g.setColour(PANEL);
-    g.fillRoundedRectangle({ 16.f, 54.f, 250.f, 80.f }, 6.f);
-    g.fillRoundedRectangle({ 16.f, 150.f, 530.f, 114.f }, 6.f);
+    g.fillRoundedRectangle({ 16.f,  54.f, 530.f, 40.f  }, 6.f); // presets
+    g.fillRoundedRectangle({ 16.f, 106.f, 250.f, 80.f  }, 6.f); // osc
+    g.fillRoundedRectangle({ 16.f, 200.f, 530.f, 100.f }, 6.f); // knobs
     g.setColour(ACCENT.withAlpha(0.15f));
-    g.drawRoundedRectangle({ 16.f, 54.f, 250.f, 80.f }, 6.f, 1.f);
-    g.drawRoundedRectangle({ 16.f, 150.f, 530.f, 114.f }, 6.f, 1.f);
+    g.drawRoundedRectangle({ 16.f,  54.f, 530.f, 40.f  }, 6.f, 1.f);
+    g.drawRoundedRectangle({ 16.f, 106.f, 250.f, 80.f  }, 6.f, 1.f);
+    g.drawRoundedRectangle({ 16.f, 200.f, 530.f, 100.f }, 6.f, 1.f);
 }
 
 void StabEditor::resized() {
-    chordLabel.setBounds(24,  58, 60, 14);
-    chordBox.setBounds(24,    74, 110, 26);
-    waveLabel.setBounds(148,  58, 60, 14);
-    waveBox.setBounds(148,    74, 110, 26);
+    // Preset buttons
+    presetClassic.setBounds(24,  62, 118, 24);
+    presetSoft.setBounds(148,    62, 118, 24);
+    presetBright.setBounds(272,  62, 118, 24);
+    presetDeep.setBounds(396,    62, 118, 24);
 
-    int y = 158, w = 54;
-    int x = 24;
+    // OSC selectors
+    chordLabel.setBounds(24, 110, 60, 14);
+    chordBox.setBounds(24,   126, 110, 26);
+    waveLabel.setBounds(148, 110, 60, 14);
+    waveBox.setBounds(148,   126, 110, 26);
+
+    // Knobs
+    int y = 208, w = 54, x = 24;
     auto place = [&](juce::Slider& s, juce::Label& l) {
         s.setBounds(x, y, w, w); l.setBounds(x, y + w, w, 14); x += 66;
     };
