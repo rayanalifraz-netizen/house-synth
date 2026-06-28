@@ -6,7 +6,22 @@ static const juce::Colour ACCENT { 0xffffcc44 }; // warm gold
 static const juce::Colour DIM    { 0xff888888 };
 
 PianoEditor::PianoEditor(PianoProcessor& p) : AudioProcessorEditor(&p), proc(p) {
-    setSize(680, 240);
+    setSize(680, 280);
+
+    presetRhodes.setButtonText("Rhodes");
+    presetBrightEP.setButtonText("Bright EP");
+    presetWarm.setButtonText("Warm");
+    presetFunky.setButtonText("Funky");
+    for (auto* btn : { &presetRhodes, &presetBrightEP, &presetWarm, &presetFunky }) {
+        btn->setColour(juce::TextButton::buttonColourId,   PANEL);
+        btn->setColour(juce::TextButton::textColourOffId,  ACCENT);
+        btn->setColour(juce::TextButton::buttonOnColourId, ACCENT);
+        addAndMakeVisible(btn);
+    }
+    presetRhodes.onClick   = [this] { proc.loadPreset(0); };
+    presetBrightEP.onClick = [this] { proc.loadPreset(1); };
+    presetWarm.onClick     = [this] { proc.loadPreset(2); };
+    presetFunky.onClick    = [this] { proc.loadPreset(3); };
 
     styleKnob(fmDepthKnob,  fmDepthL,  "FM Depth");
     styleKnob(fmDecayKnob,  fmDecayL,  "FM Decay");
@@ -55,6 +70,12 @@ void PianoEditor::paint(juce::Graphics& g) {
     g.setColour(ACCENT.withAlpha(0.3f));
     g.drawHorizontalLine(48, 16, 664);
 
+    // Presets row
+    g.setColour(PANEL);
+    g.fillRoundedRectangle({ 16.f, 54.f, 648.f, 40.f }, 6.f);
+    g.setColour(ACCENT.withAlpha(0.15f));
+    g.drawRoundedRectangle({ 16.f, 54.f, 648.f, 40.f }, 6.f, 1.f);
+
     auto box = [&](juce::Rectangle<float> r, const juce::String& label) {
         g.setColour(PANEL);
         g.fillRoundedRectangle(r, 6.f);
@@ -64,12 +85,18 @@ void PianoEditor::paint(juce::Graphics& g) {
         g.setFont(juce::Font(10.f, juce::Font::bold));
         g.drawText(label, (int)r.getX() + 6, (int)r.getY() - 14, 100, 14, juce::Justification::left);
     };
-    box({ 16.f, 68.f, 320.f, 150.f }, "FM / TONE");
-    box({ 348.f, 68.f, 320.f, 150.f }, "ENVELOPE / FX");
+    box({ 16.f, 110.f, 320.f, 150.f }, "FM / TONE");
+    box({ 348.f, 110.f, 320.f, 150.f }, "ENVELOPE / FX");
 }
 
 void PianoEditor::resized() {
-    int y = 78, w = 54, x = 24;
+    // Preset buttons
+    presetRhodes.setBounds(24,   62, 146, 24);
+    presetBrightEP.setBounds(178, 62, 146, 24);
+    presetWarm.setBounds(332,    62, 146, 24);
+    presetFunky.setBounds(486,   62, 146, 24);
+
+    int y = 120, w = 54, x = 24;
     auto place = [&](juce::Slider& s, juce::Label& l) {
         s.setBounds(x, y, w, w); l.setBounds(x, y + w, w, 14); x += 62;
     };

@@ -76,6 +76,57 @@ void PianoProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBu
     masterGain.process(ctx);
 }
 
+void PianoProcessor::setCurrentProgram(int index) {
+    currentProgram = index;
+    loadPreset(index);
+}
+
+const juce::String PianoProcessor::getProgramName(int index) {
+    switch (index) {
+        case 0: return "Rhodes";
+        case 1: return "Bright EP";
+        case 2: return "Warm";
+        case 3: return "Funky";
+        default: return "Default";
+    }
+}
+
+void PianoProcessor::loadPreset(int index) {
+    auto set = [&](const char* id, float v) {
+        if (auto* p = apvts.getParameter(id)) p->setValueNotifyingHost(p->convertTo0to1(v));
+    };
+    switch (index) {
+        case 0: // Rhodes — classic warm electric piano, subtle tremolo
+            set("EP_FM_DEPTH", 3.0f); set("EP_FM_DECAY", 0.3f);
+            set("EP_BRIGHT", 0.5f);
+            set("EP_TREM_RATE", 5.0f); set("EP_TREM_DEPTH", 0.25f);
+            set("EP_ATK", 0.005f); set("EP_DEC", 0.8f); set("EP_SUS", 0.5f); set("EP_REL", 0.6f);
+            set("EP_REVERB", 0.25f); set("EP_MASTER", 0.8f);
+            break;
+        case 1: // Bright EP — punchy attack, open, upbeat house feel
+            set("EP_FM_DEPTH", 4.5f); set("EP_FM_DECAY", 0.15f);
+            set("EP_BRIGHT", 0.85f);
+            set("EP_TREM_RATE", 0.5f); set("EP_TREM_DEPTH", 0.0f);
+            set("EP_ATK", 0.002f); set("EP_DEC", 0.4f); set("EP_SUS", 0.3f); set("EP_REL", 0.3f);
+            set("EP_REVERB", 0.15f); set("EP_MASTER", 0.8f);
+            break;
+        case 2: // Warm — soft attack, low brightness, long decay, dreamy
+            set("EP_FM_DEPTH", 1.5f); set("EP_FM_DECAY", 0.8f);
+            set("EP_BRIGHT", 0.3f);
+            set("EP_TREM_RATE", 3.5f); set("EP_TREM_DEPTH", 0.15f);
+            set("EP_ATK", 0.02f); set("EP_DEC", 1.5f); set("EP_SUS", 0.6f); set("EP_REL", 1.2f);
+            set("EP_REVERB", 0.45f); set("EP_MASTER", 0.75f);
+            break;
+        case 3: // Funky — tight, high FM, fast decay, dry, rhythmic
+            set("EP_FM_DEPTH", 5.5f); set("EP_FM_DECAY", 0.08f);
+            set("EP_BRIGHT", 0.7f);
+            set("EP_TREM_RATE", 0.5f); set("EP_TREM_DEPTH", 0.0f);
+            set("EP_ATK", 0.001f); set("EP_DEC", 0.2f); set("EP_SUS", 0.1f); set("EP_REL", 0.15f);
+            set("EP_REVERB", 0.05f); set("EP_MASTER", 0.85f);
+            break;
+    }
+}
+
 void PianoProcessor::getStateInformation(juce::MemoryBlock& dest) {
     auto state = apvts.copyState();
     std::unique_ptr<juce::XmlElement> xml(state.createXml());

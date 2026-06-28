@@ -18,11 +18,12 @@ public:
     bool producesMidi() const override { return false; }
     bool isMidiEffect() const override { return false; }
     double getTailLengthSeconds() const override { return 2.0; }
-    int getNumPrograms() override { return 1; }
-    int getCurrentProgram() override { return 0; }
-    void setCurrentProgram(int) override {}
-    const juce::String getProgramName(int) override { return "Default"; }
+    int getNumPrograms() override { return 4; }
+    int getCurrentProgram() override { return currentProgram; }
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
     void changeProgramName(int, const juce::String&) override {}
+    void loadPreset(int index);
     void getStateInformation(juce::MemoryBlock&) override;
     void setStateInformation(const void*, int) override;
 
@@ -34,5 +35,6 @@ public:
 
 private:
     juce::Synthesiser synth;
+    int currentProgram { 0 };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PianoProcessor)
 };

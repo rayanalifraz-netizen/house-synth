@@ -11,6 +11,8 @@ public:
 private:
     PianoProcessor& proc;
 
+    juce::TextButton presetRhodes, presetBrightEP, presetWarm, presetFunky;
+
     juce::Slider fmDepthKnob, fmDecayKnob, brightKnob, tremRateKnob, tremDepthKnob;
     juce::Slider atkKnob, decKnob, susKnob, relKnob, reverbKnob, masterKnob;
     juce::Label  fmDepthL, fmDecayL, brightL, tremRateL, tremDepthL;
